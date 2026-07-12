@@ -174,9 +174,12 @@ Visit **http://127.0.0.1:5000** in your browser.
 
 ## Screenshots
 
-> Add screenshots here after deployment.
+<img width="1221" height="587" alt="image" src="https://github.com/user-attachments/assets/8dc6792a-e1a1-4289-b8fe-7196474fa879" />
+<img width="1417" height="450" alt="image" src="https://github.com/user-attachments/assets/91b8ada1-104d-44c9-876d-e5b5f1993304" />
+<img width="1412" height="413" alt="image" src="https://github.com/user-attachments/assets/3a1345ea-5e10-4221-a2f2-f285261c7ece" />
+<img width="1417" height="543" alt="image" src="https://github.com/user-attachments/assets/01b6a605-47aa-49e3-82e0-54210fb35976" />
+<img width="1285" height="610" alt="image" src="https://github.com/user-attachments/assets/660bd233-68ff-4bbb-be81-383ff35b5cf6" />
 
----
 
 ## License
 
