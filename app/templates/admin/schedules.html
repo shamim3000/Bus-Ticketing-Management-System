@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Schedule Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="mb-0">Schedule Management</h4>
+    <a href="{{ url_for('admin.add_schedule') }}" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Add Schedule</a>
+</div>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead><tr><th>Bus</th><th>Route</th><th>Date</th><th>Departure</th><th>Arrival</th><th>Avail. Seats</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                    {% for s in schedules %}
+                    <tr>
+                        <td>{{ s.bus.bus_number if s.bus else 'N/A' }} - {{ s.bus.bus_name if s.bus else '' }}</td>
+                        <td>{{ s.route.origin if s.route else '' }} → {{ s.route.destination if s.route else '' }}</td>
+                        <td>{{ s.departure_date }}</td>
+                        <td>{{ s.departure_time }}</td>
+                        <td>{{ s.arrival_time }}</td>
+                        <td>{{ s.available_seats }}</td>
+                        <td><span class="badge bg-{{ 'success' if s.status == 'Scheduled' else 'secondary' if s.status == 'Completed' else 'danger' }}">{{ s.status }}</span></td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_schedule', schedule_id=s.schedule_id) }}" class="btn btn-sm btn-outline-primary"><i class="bi bi-pencil"></i></a>
+                            <form action="{{ url_for('admin.delete_schedule', schedule_id=s.schedule_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Delete?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="8" class="text-center text-muted">No schedules found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

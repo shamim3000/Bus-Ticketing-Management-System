@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}All Bookings{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">All Bookings</h4>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead><tr><th>ID</th><th>Passenger</th><th>Route</th><th>Seat</th><th>Amount</th><th>Payment</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead>
+                <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td>#{{ b.booking_id }}</td>
+                        <td>{{ b.user.full_name if b.user else 'N/A' }}</td>
+                        <td>{{ b.schedule.route.origin if b.schedule and b.schedule.route else '' }} → {{ b.schedule.route.destination if b.schedule and b.schedule.route else '' }}</td>
+                        <td>{{ b.ticket.seat_number if b.ticket else 'N/A' }}</td>
+                        <td>Tk {{ b.total_amount }}</td>
+                        <td>{{ b.payment.payment_method if b.payment else 'N/A' }}</td>
+                        <td><span class="badge bg-{{ 'success' if b.booking_status == 'Confirmed' else 'warning' if b.booking_status == 'Pending' else 'danger' }}">{{ b.booking_status }}</span></td>
+                        <td>{{ b.booking_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            {% if b.ticket %}
+                            <a href="{{ url_for('staff.reprint_ticket', booking_id=b.booking_id) }}" class="btn btn-sm btn-outline-primary" title="Reprint"><i class="bi bi-printer"></i></a>
+                            {% endif %}
+                            {% if b.booking_status != 'Cancelled' %}
+                            <form action="{{ url_for('staff.cancel_booking', booking_id=b.booking_id) }}" method="POST" class="d-inline" onsubmit="return confirm('Cancel?')">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button class="btn btn-sm btn-outline-danger" title="Cancel"><i class="bi bi-x-circle"></i></button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="9" class="text-center text-muted">No bookings found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

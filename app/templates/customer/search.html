@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block title %}Search Bus{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Book Your Ticket</h4>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label">From</label>
+                    <select name="origin" class="form-select" required>
+                        <option value="">Select City</option>
+                        {% for city in cities %}
+                        <option value="{{ city }}" {% if origin == city %}selected{% endif %}>{{ city }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">To</label>
+                    <select name="destination" class="form-select" required>
+                        <option value="">Select City</option>
+                        {% for city in cities %}
+                        <option value="{{ city }}" {% if destination == city %}selected{% endif %}>{{ city }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Travel Date</label>
+                    <input type="date" name="travel_date" class="form-control" value="{{ travel_date or '' }}" required>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label">Bus Type</label>
+                    <select name="bus_type" class="form-select">
+                        <option value="">All</option>
+                        <option value="AC" {% if bus_type == 'AC' %}selected{% endif %}>AC</option>
+                        <option value="Non-AC" {% if bus_type == 'Non-AC' %}selected{% endif %}>Non-AC</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search"></i> Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if results is not none %}
+<div class="card">
+    <div class="card-header"><h6 class="mb-0">Available Buses</h6></div>
+    <div class="card-body">
+        {% if results %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead><tr><th>Bus</th><th>Type</th><th>Departure</th><th>Arrival</th><th>Fare</th><th>Available Seats</th><th>Action</th></tr></thead>
+                <tbody>
+                    {% for s in results %}
+                    <tr>
+                        <td><strong>{{ s.bus.bus_name }}</strong><br><small class="text-muted">{{ s.bus.bus_number }}</small></td>
+                        <td><span class="badge bg-{{ 'info' if s.bus.bus_type == 'AC' else 'secondary' }}">{{ s.bus.bus_type }}</span></td>
+                        <td>{{ s.departure_time }}</td>
+                        <td>{{ s.arrival_time }}</td>
+                        <td><strong>Tk {{ s.route.fare }}</strong></td>
+                        <td><span class="badge bg-{{ 'success' if s.available_seats > 5 else 'warning' }}">{{ s.available_seats }}</span></td>
+                        <td><a href="{{ url_for('customer.seat_selection', schedule_id=s.schedule_id) }}" class="btn btn-sm btn-primary">Book Now</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-muted py-4">No buses available for the selected route and date.</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

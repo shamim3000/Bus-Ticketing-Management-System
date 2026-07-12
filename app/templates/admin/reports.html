@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Sales Reports{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Sales Reports</h4>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label class="form-label">Report Type</label>
+                <div class="btn-group w-100" role="group">
+                    <a href="{{ url_for('admin.reports', type='daily') }}" class="btn btn-{{ 'primary' if report_type == 'daily' else 'outline-primary' }}">Daily</a>
+                    <a href="{{ url_for('admin.reports', type='weekly') }}" class="btn btn-{{ 'primary' if report_type == 'weekly' else 'outline-primary' }}">Weekly</a>
+                    <a href="{{ url_for('admin.reports', type='monthly') }}" class="btn btn-{{ 'primary' if report_type == 'monthly' else 'outline-primary' }}">Monthly</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <span class="text-muted">Period: {{ start_date }} to {{ end_date }}</span>
+            </div>
+            <div class="col-md-4 text-end">
+                <button type="button" class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer"></i> Print</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-3">
+        <div class="card stat-card bg-primary text-white">
+            <div class="card-body text-center">
+                <h6>Total Tickets Sold</h6>
+                <h2>{{ total_tickets }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-success text-white">
+            <div class="card-body text-center">
+                <h6>Total Revenue</h6>
+                <h2>Tk {{ '{:,.0f}'.format(total_revenue) }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-danger text-white">
+            <div class="card-body text-center">
+                <h6>Cancelled Tickets</h6>
+                <h2>{{ cancelled_count }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stat-card bg-warning text-dark">
+            <div class="card-body text-center">
+                <h6>Refund Amount</h6>
+                <h2>Tk {{ '{:,.0f}'.format(refund_amount) }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <h6>Summary</h6>
+        <table class="table">
+            <tr><td>Confirmed Bookings</td><td><strong>{{ confirmed_count }}</strong></td></tr>
+            <tr><td>Cancelled Bookings</td><td><strong>{{ cancelled_count }}</strong></td></tr>
+            <tr><td>Net Revenue</td><td><strong>Tk {{ '{:,.0f}'.format(total_revenue - refund_amount) }}</strong></td></tr>
+            <tr><td>Most Popular Route</td><td><strong>{{ most_popular }}</strong></td></tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

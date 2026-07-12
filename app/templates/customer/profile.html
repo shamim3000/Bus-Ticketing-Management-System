@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">My Profile</h4>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" name="full_name" class="form-control" value="{{ current_user.full_name }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-control" value="{{ current_user.email }}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="phone" class="form-control" value="{{ current_user.phone }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="address" class="form-control" value="{{ current_user.address or '' }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Role</label>
+                    <input type="text" class="form-control" value="{{ current_user.role }}" disabled>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Member Since</label>
+                    <input type="text" class="form-control" value="{{ current_user.created_at.strftime('%Y-%m-%d') if current_user.created_at else '' }}" disabled>
+                </div>
+                <div class="col-12"><hr><h6>Change Password (optional)</h6></div>
+                <div class="col-md-6">
+                    <label class="form-label">New Password</label>
+                    <input type="password" name="new_password" class="form-control" placeholder="Leave blank to keep current">
+                    <small class="text-muted">Minimum 6 characters</small>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-circle"></i> Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

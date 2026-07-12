@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block title %}Payment{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Payment</h4>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-3">
+            <div class="card-header"><h6 class="mb-0">Booking Summary</h6></div>
+            <div class="card-body">
+                <table class="table table-borderless">
+                    <tr><td>Passenger</td><td><strong>{{ current_user.full_name }}</strong></td></tr>
+                    <tr><td>Route</td><td>{{ booking.schedule.route.origin }} → {{ booking.schedule.route.destination }}</td></tr>
+                    <tr><td>Bus</td><td>{{ booking.schedule.bus.bus_name }} ({{ booking.schedule.bus.bus_type }})</td></tr>
+                    <tr><td>Date</td><td>{{ booking.schedule.departure_date }}</td></tr>
+                    <tr><td>Seat</td><td><strong>{{ booking.ticket.seat_number }}</strong></td></tr>
+                    <tr><td>Fare</td><td><strong class="text-primary">Tk {{ booking.total_amount }}</strong></td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header"><h6 class="mb-0">Payment Method</h6></div>
+            <div class="card-body">
+                <form method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <div class="mb-3">
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" value="Card" id="card" required>
+                            <label class="form-check-label" for="card"><i class="bi bi-credit-card"></i> Card (Visa/Mastercard)</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" value="bKash" id="bkash">
+                            <label class="form-check-label" for="bkash"><i class="bi bi-phone"></i> bKash</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" value="Nagad" id="nagad">
+                            <label class="form-check-label" for="nagad"><i class="bi bi-phone"></i> Nagad</label>
+                        </div>
+                        <div class="form-check mb-2">
+                            <input class="form-check-input" type="radio" name="payment_method" value="Rocket" id="rocket">
+                            <label class="form-check-label" for="rocket"><i class="bi bi-phone"></i> Rocket</label>
+                        </div>
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>Total Amount: Tk {{ booking.total_amount }}</strong>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100 btn-lg">
+                        <i class="bi bi-check-circle"></i> Confirm Payment
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

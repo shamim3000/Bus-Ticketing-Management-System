@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Payments{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">Payments</h4>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead><tr><th>ID</th><th>Booking</th><th>Passenger</th><th>Method</th><th>Transaction</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                <tbody>
+                    {% for p in payments %}
+                    <tr>
+                        <td>#{{ p.payment_id }}</td>
+                        <td>#{{ p.booking_id }}</td>
+                        <td>{{ p.booking.user.full_name if p.booking and p.booking.user else 'N/A' }}</td>
+                        <td><span class="badge bg-info">{{ p.payment_method }}</span></td>
+                        <td><code>{{ p.transaction_id }}</code></td>
+                        <td>Tk {{ p.payment_amount }}</td>
+                        <td><span class="badge bg-{{ 'success' if p.payment_status == 'Paid' else 'warning' if p.payment_status == 'Pending' else 'danger' if p.payment_status == 'Failed' else 'secondary' }}">{{ p.payment_status }}</span></td>
+                        <td>{{ p.payment_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="8" class="text-center text-muted">No payments found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

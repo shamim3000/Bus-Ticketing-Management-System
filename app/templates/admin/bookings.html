@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}All Bookings{% endblock %}
+
+{% block content %}
+<h4 class="mb-4">All Bookings</h4>
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead><tr><th>ID</th><th>Passenger</th><th>Route</th><th>Bus</th><th>Seat</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                <tbody>
+                    {% for b in bookings %}
+                    <tr>
+                        <td>#{{ b.booking_id }}</td>
+                        <td>{{ b.user.full_name if b.user else 'N/A' }}</td>
+                        <td>{{ b.schedule.route.origin if b.schedule and b.schedule.route else '' }} → {{ b.schedule.route.destination if b.schedule and b.schedule.route else '' }}</td>
+                        <td>{{ b.schedule.bus.bus_number if b.schedule and b.schedule.bus else '' }}</td>
+                        <td>{{ b.ticket.seat_number if b.ticket else 'N/A' }}</td>
+                        <td>Tk {{ b.total_amount }}</td>
+                        <td><span class="badge bg-{{ 'success' if b.booking_status == 'Confirmed' else 'warning' if b.booking_status == 'Pending' else 'danger' }}">{{ b.booking_status }}</span></td>
+                        <td>{{ b.booking_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="8" class="text-center text-muted">No bookings found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
